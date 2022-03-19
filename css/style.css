@@ -25,11 +25,15 @@ body {
   margin-top: -15px;
 }
 
-#projects {
+#social {
   background-color: #f8ffd5;
 }
+/* 
+#projects {
+  background-color: #f8ffd5;
+} */
 
-#contact {
+#gallery {
   background-color: #f8ffd5;
 }
 
@@ -47,6 +51,17 @@ section {
 /* menghilangkan padding pada gambar, kalau menggunakan bootstrap */
 #gallery .row > * {
   padding: 0;
+}
+
+.ig-thumbnail {
+  width: 100px;
+  height: 100px;
+  float: left;
+  overflow: hidden;
+}
+
+.ig-thumbnail img {
+  width: 100px;
 }
 
 /*projects gambar parallax*/

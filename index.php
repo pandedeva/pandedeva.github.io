@@ -1,3 +1,62 @@
+<?php 
+
+  function get_CURL($url)
+  {
+    // connect api youtube menggunakan CURL
+    $curl = curl_init();
+    // untuk menset opsinya
+    curl_setopt($curl, CURLOPT_URL, $url);
+    // menginginkan data yang dikembalikan berbentuk JSON
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    // eksekusi curl nya
+    $result = curl_exec($curl);
+    curl_close($curl);
+  
+    // ubah json menjadi array
+    return json_decode($result, true);
+  }
+
+  // menampilkan account youtube
+  $result = get_CURL('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=UC652oRUvX1onwrrZ8ADJRPw&key=AIzaSyBuwC-5nb47xNXE8JLti49Nl8HOmJ2nZVc');
+
+  $youtubeProfilePic = $result['items'][0]['snippet']['thumbnails']['medium']['url'];
+  $channelName = $result['items'][0]['snippet']['title'];
+  $subscribers = $result['items'][0]['statistics']['subscriberCount'];
+
+  // latest video
+  $urlLatestVideo = 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyBuwC-5nb47xNXE8JLti49Nl8HOmJ2nZVc&channelId=UC652oRUvX1onwrrZ8ADJRPw&maxResults=1&order=date&part=snippet';
+  $result = get_CURL($urlLatestVideo);
+  $latestVideoId = $result['items'][0]['id']['videoId'];
+
+
+  function singkat_angka($n, $presisi=1) {
+    if ($n < 900) {
+      $format_angka = number_format($n, $presisi);
+      $simbol = '';
+    } else if ($n < 900000) {
+      $format_angka = number_format($n / 1000, $presisi);
+      $simbol = 'k';
+    } else if ($n < 900000000) {
+      $format_angka = number_format($n / 1000000, $presisi);
+      $simbol = 'M';
+    } else if ($n < 900000000000) {
+      $format_angka = number_format($n / 1000000000, $presisi);
+      $simbol = 'B';
+    } else {
+      $format_angka = number_format($n / 1000000000000, $presisi);
+      $simbol = 'T';
+    }
+  
+    if ( $presisi > 0 ) {
+      $pisah = '.' . str_repeat( '0', $presisi );
+      $format_angka = str_replace( $pisah, '', $format_angka );
+    }
+    return $format_angka . $simbol;
+  }
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -25,7 +84,7 @@
   </head>
   <body id="home">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light shadow-sm fixed-top" style="background-color: #d6e478">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top" >
       <div class="container">
         <a class="navbar-brand" href="#home">Pande Deva</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +115,7 @@
 
     <!-- Jumbotron -->
     <section class="jumbotron text-center">
-      <img src="img/jumbotron.jpg" alt="Pande Deva" width="200" class="rounded-circle img-thumbnail" />
+      <img src="img/profile-pic.jpg" alt="Pande Deva" width="200" class="rounded-circle img-thumbnail" />
       <h1 class="display-4">Deva</h1>
       <p class="lead"></p>
       <p class="lead-2" data-aos="fade-zoom-in" data-aos-duration="1000" data-aos-delay="2500" data-aos-easing="ease-in-back">All Love <i class="bi bi-suit-heart-fill text-danger"></i></p>
@@ -102,7 +161,75 @@
     </section>
     <!-- End About -->
 
-    <!-- rumusnya section, container, row, col -->
+    <!-- Social Media -->
+    <section class="social" id="social">
+      <div class="container">
+        <div class="row text-center mb-3">
+          <div class="col">
+            <h2>Social Media</h2>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <!-- page youtube -->
+          <div class="col-md-5">
+            <div class="row">
+              <div class="col-md-4">
+                <img src="<?= $youtubeProfilePic ?>" width="200" class="rounded-circle img-thumbnail">
+              </div>
+              <div class="col-md-8">
+                <h5><?= $channelName ?></h5>
+                <p class="text-secondary"><?= singkat_angka($subscribers) ?> Subscribers.</p>
+                <div class="g-ytsubscribe" data-channelid="UC652oRUvX1onwrrZ8ADJRPw" data-layout="default" data-count="hidden"></div>
+              </div>
+            </div>
+            <div class="row mt-3 pb-3">
+              <div class="col">
+                <div class="ratio ratio-16x9">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/<?= $latestVideoId ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end page youtube -->
+          <!-- page instagram -->
+          <div class="col-md-5">
+            <div class="row">
+              <div class="col-md-4">
+                <img src="img/profile-pic.jpg" width="200" class="rounded-circle img-thumbnail">
+              </div>
+              <div class="col-md-8">
+                <h5>@devvstayalive</h5>
+                <p class="text-secondary">14 Followers.</p>
+              </div>
+            </div>
+
+            <div class="row mt-3 pb-3">
+              <div class="col">
+                <div class="ig-thumbnail">
+                  <img src="img/gallery/1.jpg" alt="">
+                </div>
+                <div class="ig-thumbnail">
+                  <img src="img/gallery/2.jpg" alt="">
+                </div>
+                <div class="ig-thumbnail">
+                  <img src="img/gallery/3.jpg" alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end page instagram -->
+        </div>
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path 
+          fill="#ffff"
+          fill-opacity="1" 
+          d="M0,32L34.3,64C68.6,96,137,160,206,202.7C274.3,245,343,267,411,240C480,213,549,139,617,106.7C685.7,75,754,85,823,101.3C891.4,117,960,139,1029,133.3C1097.1,128,1166,96,1234,74.7C1302.9,53,1371,43,1406,37.3L1440,32L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z"
+        ></path>
+      </svg>
+    </section>
+    <!-- end Youtube & Instagram -->
+
     <!-- Projects -->
     <section id="projects">
       <div class="container">
@@ -172,9 +299,9 @@
       </div>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
         <path
-          fill="#ffffff"
+          fill="#F8FFD5"
           fill-opacity="1"
-          d="M0,192L24,176C48,160,96,128,144,133.3C192,139,240,181,288,213.3C336,245,384,267,432,240C480,213,528,139,576,117.3C624,96,672,128,720,154.7C768,181,816,203,864,186.7C912,171,960,117,1008,117.3C1056,117,1104,171,1152,213.3C1200,256,1248,288,1296,282.7C1344,277,1392,235,1416,213.3L1440,192L1440,320L1416,320C1392,320,1344,320,1296,320C1248,320,1200,320,1152,320C1104,320,1056,320,1008,320C960,320,912,320,864,320C816,320,768,320,720,320C672,320,624,320,576,320C528,320,480,320,432,320C384,320,336,320,288,320C240,320,192,320,144,320C96,320,48,320,24,320L0,320Z"
+          d="M0,192L60,202.7C120,213,240,235,360,218.7C480,203,600,149,720,144C840,139,960,181,1080,192C1200,203,1320,181,1380,170.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
         ></path>
       </svg>
     </section>
@@ -243,7 +370,7 @@
       </div>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
         <path
-          fill="#f8ffd5"
+          fill="#ffffff"
           fill-opacity="1"
           d="M0,96L40,117.3C80,139,160,181,240,176C320,171,400,117,480,96C560,75,640,85,720,106.7C800,128,880,160,960,144C1040,128,1120,64,1200,42.7C1280,21,1360,43,1400,53.3L1440,64L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"
         ></path>
@@ -326,5 +453,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/TextPlugin.min.js"></script>
     <!-- my js -->
     <script src="./js/script.js"></script>
+    <!-- script tombol youtube -->
+    <script src="https://apis.google.com/js/platform.js"></script>
   </body>
 </html>
