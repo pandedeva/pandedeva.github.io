@@ -28,6 +28,14 @@
   $result = get_CURL($urlLatestVideo);
   $latestVideoId = $result['items'][0]['id']['videoId'];
 
+  // instagram API
+  $clientId = '5210259822366925';
+  $accessToken = 'IGQVJVNGhXaW11TWVDSVhQMGJMQnU0Snl6ZAkxDS1pqR1o0OE5TTFBfd1dPWjBtUHUtTjctZA2hKN2IyeGxWZAUpINTZAKbDg3N2ctQzdYT0xVNGpFa1c4OVdoZA0FRcnhPWm9sMjYwSmZAsdjlRX2o2TDhPWgZDZD';
+
+  $result = get_CURL('');
+
+
+
 
   function singkat_angka($n, $presisi=1) {
     if ($n < 900) {
@@ -213,6 +221,21 @@
                 </div>
                 <div class="ig-thumbnail">
                   <img src="img/gallery/3.jpg" alt="">
+                </div>
+                <div class="ig-thumbnail">
+                  <img src="img/gallery/4.jpg" alt="">
+                </div>
+                <div class="ig-thumbnail">
+                  <img src="img/gallery/5.jpg" alt="">
+                </div>
+                <div class="ig-thumbnail">
+                  <img src="img/gallery/6.jpg" alt="">
+                </div>
+                <div class="ig-thumbnail">
+                  <img src="img/gallery/7.jpg" alt="">
+                </div>
+                <div class="ig-thumbnail">
+                  <img src="img/gallery/8.jpg" alt="">
                 </div>
               </div>
             </div>
